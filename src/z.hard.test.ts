@@ -75,5 +75,22 @@ describe('hard test', () => {
         console.log(u.format(`yyyy yy MM dd HH hh mm ss SSS XXX a e EE E 'yyyy escape'`))
         console.log(u.format(`yyyy yy MM dd HH hh mm ss SSS XXX a e EE E 'yyyy escape'`, -60))
         console.log(u.formatUtc(`yyyy yy MM dd HH hh mm ss SSS XXX a e EE E 'yyyy escape'`))
+        console.log();
+
+        u = Unixtime.from(2000, 2, 1);
+        assert.equal(u.getLastDayOfMonth(), 29);
+        assert.equal(u.getAmPm(), 'AM');
+        assert.equal(u.getHours(), 0);
+        assert.equal(u.getHours12(), 12);
+        console.log(u.getLastDayOfMonth(), u.getAmPm(), u.getHours(), u.getHours12())
+        console.log();
+
+        u = Unixtime.from(2100, 2, 1, 12);
+        assert.equal(u.getLastDayOfMonth(), 28);
+        assert.equal(u.getAmPm(), 'PM');
+        assert.equal(u.getHours(), 12);
+        assert.equal(u.getHours12(), 12);
+        console.log(u.getLastDayOfMonth(), u.getAmPm(), u.getHours(), u.getHours12())
+        console.log();
     });
 });

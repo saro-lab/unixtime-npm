@@ -1,6 +1,6 @@
 {
   "name": "infinite-unixtime",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Infinite(Unlimited) Unixtime - ignore LMT(Local mean time)",
   "keywords": [
     "unix-time",

@@ -1,7 +1,7 @@
 import {
-    _format,
+    _format, _get_last_day_of_month,
     _merge_all,
-    _to_date_time_detail,
+    _to_date_time_detail, _to_E, _to_EE,
     _to_time_detail,
     _to_week_un_timezone,
     _with_timezone_offset,
@@ -75,6 +75,11 @@ export class Unixtime {
         return this.toDateTimeDetail(timezoneOffset).month;
     }
 
+    public getLastDayOfMonth(timezoneOffset = new Date().getTimezoneOffset()): number {
+        const detail = this.toDateTimeDetail(timezoneOffset);
+        return _get_last_day_of_month(detail.month, detail.leapYear);
+    }
+
     public getDay(timezoneOffset = new Date().getTimezoneOffset()): number {
         return this.toDateTimeDetail(timezoneOffset).day;
     }
@@ -84,15 +89,23 @@ export class Unixtime {
     }
 
     public getWeekShort(timezoneOffset = new Date().getTimezoneOffset()): string {
-        return this.format(`E`, timezoneOffset);
+        return _to_E(this.getWeek(timezoneOffset));
     }
 
     public getWeekLong(timezoneOffset = new Date().getTimezoneOffset()): string {
-        return this.format(`EE`, timezoneOffset);
+        return _to_EE(this.getWeek(timezoneOffset));
     }
 
     public getHours(timezoneOffset = new Date().getTimezoneOffset()): number {
         return this.toTimeDetail(timezoneOffset).hours;
+    }
+
+    public getHours12(timezoneOffset = new Date().getTimezoneOffset()): number {
+        return this.toTimeDetail(timezoneOffset).hours % 12 || 12;
+    }
+
+    public getAmPm(timezoneOffset = new Date().getTimezoneOffset()): string {
+        return this.getHours(timezoneOffset) < 12 ? "AM" : "PM";
     }
 
     public getMinutes(timezoneOffset = new Date().getTimezoneOffset()): number {

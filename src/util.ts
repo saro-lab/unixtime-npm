@@ -11,10 +11,10 @@ const Y100 = (Y4 * 25n) - 1n; // 100 years
 const Y400 = (Y100 * 4n) + 1n; // 400 years
 
 // M = MILLISECOND
-export const MD1 = 86_400_000n;
-export const MH1 = 3_600_000n;
-export const MM1 = 60_000n;
 export const MS1 = 1000n;
+export const MM1 = MS1 * 60n;
+export const MH1 = MM1 * 60n;
+export const MD1 = MH1 * 24n;
 export const MY400 = Y400 * MD1;
 
 // unix millis to y2k (2000/01/01)
@@ -22,12 +22,8 @@ const Y2K_UMILLIS = 946684800000n;
 // unix millis to - year zero (0000/01/01)
 const ZY_UMILLIS = -62167219200000n;
 
-const DAY_LEN_IN_MONTH= [0, 31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
-const DAY_LEN_IN_MONTH_ACC= [0, 0, 31, 60, 91, 121, 152, 182, 213, 244, 274, 305, 335];
-
-export function _with_timezone_offset(millis: bigint, timezoneOffset: number): bigint {
-    return millis - (BigInt(timezoneOffset) * MM1)
-}
+const DAY_LEN_IN_MONTH = [0, 31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+const DAY_LEN_IN_MONTH_ACC = [0, 0, 31, 60, 91, 121, 152, 182, 213, 244, 274, 305, 335];
 
 function zerofill(n: number|bigint|string, fill: number): string {
     if (typeof n === 'string') {
@@ -70,7 +66,7 @@ function toBigIntRange(n: number|bigint, min: bigint|null = null, max: bigint|nu
     throw new Error(`is not range of bigint: ${n}`);
 }
 
-function to_XXX(detail: DateTimeDetail): string {
+export function _to_XXX(detail: DateTimeDetail): string {
     let tz = detail.timezoneOffset * -1;
     if (tz === 0) {
         return 'Z';
@@ -82,16 +78,20 @@ function to_XXX(detail: DateTimeDetail): string {
     return `${sign}${zerofill(h, 2)}:${zerofill(m, 2)}`;
 }
 
-function to_a(detail: DateTimeDetail): string {
+export function _to_a(detail: DateTimeDetail): string {
     return detail.hours >= 12 ? 'PM' : 'AM';
 }
 
-function to_E(week: number): string {
+export function _to_E(week: number): string {
     return ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'][week % 7];
 }
 
-function to_EE(week: number): string {
+export function _to_EE(week: number): string {
     return ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'][week % 7];
+}
+
+export function _with_timezone_offset(millis: bigint, timezoneOffset: number): bigint {
+    return millis - (BigInt(timezoneOffset) * MM1)
 }
 
 // [leapYear, leapCount]
@@ -269,15 +269,15 @@ export function _format(detail: DateTimeDetail, format: string): string {
                             case 'MM': return zerofill(detail.month, 2);
                             case 'dd': return zerofill(detail.day, 2);
                             case 'HH': return zerofill(detail.hours, 2);
-                            case 'hh': return zerofill(detail.hours > 12 ? detail.hours - 12 : detail.hours, 2);
+                            case 'hh': return zerofill(detail.hours % 12 || 12, 2);
                             case 'mm': return zerofill(detail.minutes, 2);
                             case 'ss': return zerofill(detail.seconds, 2);
                             case 'SSS': return zerofill(detail.milliseconds, 3);
-                            case 'XXX': return to_XXX(detail);
-                            case 'a': return to_a(detail);
+                            case 'XXX': return _to_XXX(detail);
+                            case 'a': return _to_a(detail);
                             case 'e': return detail.week.toString();
-                            case 'E': return to_E(detail.week);
-                            case 'EE': return to_EE(detail.week);
+                            case 'E': return _to_E(detail.week);
+                            case 'EE': return _to_EE(detail.week);
                         }
                         return e;
                     })

@@ -11,7 +11,7 @@ npm install infinite-unixtime
 ## CDN Build Example
 - [Download CDN Build](https://github.com/saro-lab/unixtime-npm/releases)
 ```html
-<script src="./infinite-unixtime-1.0.0.js"></script>
+<script src="./infinite-unixtime-1.0.1.js"></script>
 <pre id="result"></pre>
 <script type="text/javascript">
     // Global Naming
@@ -19,7 +19,7 @@ npm install infinite-unixtime
     // Example
     let w = '';
     w += Unixtime.now() + '\n'
-    w += Unixtime.fromMillis(1234567890123) + '\n'
+    w += Unixtime.fromMillis(123456333242347890123) + '\n'
     // 23948923423421773421234-01-31T00:00:00.000Z
     w += Unixtime.fromUtc(23948923423421773421234n, 1, 31).toIsoStringUtc() + '\n';
     // -3472472928838222222282881717114-12-31T14:59:59.999Z

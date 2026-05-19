@@ -1,0 +1,141 @@
+import {
+    _format,
+    _merge_all,
+    _to_date_time_detail,
+    _to_time_detail,
+    _to_week_un_timezone,
+    _with_timezone_offset,
+    MD1,
+    MH1,
+    MM1,
+    MS1
+} from "./util";
+import {DateTimeDetail, TimeDetail} from "./index";
+
+export class Unixtime {
+    readonly time: bigint;
+    constructor(umillis: bigint) {
+        this.time = umillis;
+    }
+    public static now() {
+        return new Unixtime(BigInt(new Date().getTime()));
+    }
+    public static fromDate(date: Date): Unixtime {
+        return new Unixtime(BigInt(date.getTime()));
+    }
+    public static fromMillis(unixMillis: bigint|number|string): Unixtime {
+        return new Unixtime(BigInt(typeof unixMillis === 'number' ? Math.floor(unixMillis) : unixMillis));
+    }
+    public static fromSeconds(unixSeconds: bigint|number|string): Unixtime {
+        return new Unixtime(BigInt(typeof unixSeconds === 'number' ? Math.floor(unixSeconds) : unixSeconds) * 1000n);
+    }
+    public static from(
+        year: number|bigint = 1, month: number|bigint = 1, day: number|bigint = 1,
+        hour: number|bigint = 0, minute: number|bigint = 0, second: number|bigint = 0, millisecond: number|bigint = 0,
+        timezoneOffset = new Date().getTimezoneOffset(),
+    ): Unixtime {
+        return new Unixtime(_merge_all(year, month, day, hour, minute, second, millisecond, timezoneOffset));
+    }
+    public static fromUtc(
+        year: number|bigint = 1, month: number|bigint = 1, day: number|bigint = 1,
+        hour: number|bigint = 0, minute: number|bigint = 0, second: number|bigint = 0, millisecond: number|bigint = 0,
+    ): Unixtime {
+        return new Unixtime(_merge_all(year, month, day, hour, minute, second, millisecond, 0));
+    }
+
+    public toTimeDetail(timezoneOffset = new Date().getTimezoneOffset()): TimeDetail {
+        return _to_time_detail(this.time, timezoneOffset);
+    }
+
+    public toDateTimeDetail(timezoneOffset = new Date().getTimezoneOffset()): DateTimeDetail {
+        return _to_date_time_detail(this.time, timezoneOffset);
+    }
+
+    public format(dateFormat: string, timezoneOffset = new Date().getTimezoneOffset()): string {
+        return _format(this.toDateTimeDetail(timezoneOffset), dateFormat);
+    }
+
+    public formatUtc(dateFormat: string): string {
+        return _format(this.toDateTimeDetail(0), dateFormat);
+    }
+
+    public toString(timezoneOffset = new Date().getTimezoneOffset()): string {
+        return this.format(`yyyy-MM-dd (E) a hh:mm ss.SSS XXX`, timezoneOffset);
+    }
+
+    public getYear(timezoneOffset = new Date().getTimezoneOffset()): bigint {
+        return this.toDateTimeDetail(timezoneOffset).year;
+    }
+
+    public getYearNumber(timezoneOffset = new Date().getTimezoneOffset()): number {
+        return Number(this.toDateTimeDetail(timezoneOffset).year);
+    }
+
+    public getMonth(timezoneOffset = new Date().getTimezoneOffset()): number {
+        return this.toDateTimeDetail(timezoneOffset).month;
+    }
+
+    public getDay(timezoneOffset = new Date().getTimezoneOffset()): number {
+        return this.toDateTimeDetail(timezoneOffset).day;
+    }
+
+    public getWeek(timezoneOffset = new Date().getTimezoneOffset()): number {
+        return _to_week_un_timezone(_with_timezone_offset(this.time, timezoneOffset))
+    }
+
+    public getWeekShort(timezoneOffset = new Date().getTimezoneOffset()): string {
+        return this.format(`E`, timezoneOffset);
+    }
+
+    public getWeekLong(timezoneOffset = new Date().getTimezoneOffset()): string {
+        return this.format(`EE`, timezoneOffset);
+    }
+
+    public getHours(timezoneOffset = new Date().getTimezoneOffset()): number {
+        return this.toTimeDetail(timezoneOffset).hours;
+    }
+
+    public getMinutes(timezoneOffset = new Date().getTimezoneOffset()): number {
+        return this.toTimeDetail(timezoneOffset).minutes;
+    }
+
+    public getSeconds(timezoneOffset = new Date().getTimezoneOffset()): number {
+        return this.toTimeDetail(timezoneOffset).seconds;
+    }
+
+    public getMilliseconds(timezoneOffset = new Date().getTimezoneOffset()): number {
+        return this.toTimeDetail(timezoneOffset).milliseconds;
+    }
+
+    public toStringUtc(): string {
+        return this.formatUtc(`yyyy-MM-dd (E) a hh:mm ss.SSS XXX`);
+    }
+
+    public toIsoString(timezoneOffset = new Date().getTimezoneOffset()): string {
+        return this.format(`yyyy-MM-ddTHH:mm:ss.SSSXXX`, timezoneOffset);
+    }
+
+    public toIsoStringUtc(): string {
+        return this.formatUtc(`yyyy-MM-ddTHH:mm:ss.SSSXXX`);
+    }
+
+    public plusMillis(milliseconds: number|bigint): Unixtime {
+        return new Unixtime(this.time + BigInt(milliseconds));
+    }
+
+    public plusSeconds(seconds: number|bigint): Unixtime {
+        return new Unixtime(this.time + (BigInt(seconds) * MS1));
+    }
+
+    public plusMinutes(minutes: number|bigint): Unixtime {
+        return new Unixtime(this.time + (BigInt(minutes) * MM1));
+    }
+
+    public plusHours(hours: number|bigint): Unixtime {
+        return new Unixtime(this.time + (BigInt(hours) * MH1));
+    }
+
+    public plusDays(days: number|bigint): Unixtime {
+        return new Unixtime(this.time + (BigInt(days) * MD1));
+    }
+}

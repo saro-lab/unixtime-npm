@@ -1,7 +1,7 @@
 {
   "name": "infinite-unixtime",
   "version": "1.0.0",
-  "description": "unlimited unixtime - ignore LMT(Local mean time)",
+  "description": "Infinite(Unlimited) Unixtime - ignore LMT(Local mean time)",
   "keywords": [
     "unix-time",
     "unixtime",
@@ -40,9 +40,14 @@
   "scripts": {
     "build": "tsc && tsc -p tsconfig.json",
     "test": "vitest run",
-    "prepublishOnly": "npm run build"
+    "prepublishOnly": "npm run build",
+    "build:plain": "tsup"
   },
   "devDependencies": {
+    "@rollup/plugin-commonjs": "^29.0.2",
+    "@rollup/plugin-node-resolve": "^16.0.3",
+    "rollup": "^4.60.4",
+    "tsup": "^8.5.1",
     "typescript": "^6.0.3",
     "vitest": "^4.1.6"
   }

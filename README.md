@@ -1,4 +1,4 @@
-# unlimite UNIXTIME
+# Infinite Unixtime
 
 
 ### [Online Demo](https://dat.saro.me/--/tool/times)
@@ -8,10 +8,49 @@
 npm install infinite-unixtime
 ```
 
-## Unlimited Time Range
+## CDN Build Example
+- [Download CDN Build](https://github.com/saro-lab/unixtime-npm/releases)
+```html
+<script src="./infinite-unixtime-1.0.0.js"></script>
+<pre id="result"></pre>
+<script type="text/javascript">
+// Global Naming
+const Unixtime = unixtime.Unixtime;
+// Example
+let w = '';
+w += Unixtime.fromUtc(23948921773421234n, 1, 31).toIsoStringUtc();
+w += '\n';
+w += Unixtime.from(-3472472928838282881717114n, 12, 31).toIsoStringUtc();
+w += '\n';
+w += Unixtime.now().toIsoStringUtc();
+document.getElementById('result').innerText = w;
+</script>
+```
+
+## Features
+- Infinite Time Support
 ```javascript
 console.log(Unixtime.fromUtc(23948921773421234n, 1, 31).toIsoStringUtc());
 console.log(Unixtime.from(-3472472928838282881717114n, 12, 31).toIsoStringUtc());
+```
+- Ignore [LMT(Local mean time)](https://en.wikipedia.org/wiki/Local_mean_time)
+- Guarantees a consistent timezone offset across all eras, bypassing the historic LMT shifts often found in native environment implementations.
+```javascript
+// Example: Asia/Seoul (+09:00)
+
+// Native JavaScript Date applies LMT for older dates
+new Date(2000, 0, 1)
+// -> Sat Jan 01 2000 00:00:00 GMT+0900 (Korean Standard Time)
+new Date(1900, 0, 1)
+// -> Mon Jan 01 1900 00:00:00 GMT+0827 (Korean Standard Time)
+// Note the +08:27 LMT shift
+
+// Unixtime maintains the same timezone offset consistently
+Unixtime.from(1900, 1, 1).toString()
+// -> 2000-01-01 (Sat) AM 00:00 00.000 +09:00
+Unixtime.from(1900, 1, 1).toString()
+// -> 1900-01-01 (Mon) AM 00:00 00.000 +09:00
+// +09:00 maintain same timezone
 ```
 
 ## Example

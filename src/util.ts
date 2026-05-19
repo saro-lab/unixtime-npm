@@ -287,3 +287,29 @@ export function _format(detail: DateTimeDetail, format: string): string {
         }
     }).join('');
 }
+
+export function __parse_iso(isoFormat: string): string {
+    // TODO
+    throw new Error('TODO');
+}
+
+export function __parse(data: string, format: string): string {
+    if (!data) {
+        return '';
+    }
+    if (1 === 1) {
+        throw new Error('TODO');
+    }
+    return format.split(/'/).map((s, i) => {
+        if (i % 2 === 0) {
+            return (s
+                    .replace(/yyyy|yy|MM|dd|HH|hh|mm|ss|SSS|XXX|a|e|EE|E/g, (e) => {
+
+                        return e;
+                    })
+            )
+        } else {
+            return s;
+        }
+    }).join('');
+}

@@ -14,16 +14,17 @@ npm install infinite-unixtime
 <script src="./infinite-unixtime-1.0.0.js"></script>
 <pre id="result"></pre>
 <script type="text/javascript">
-// Global Naming
-const Unixtime = unixtime.Unixtime;
-// Example
-let w = '';
-w += Unixtime.fromUtc(23948921773421234n, 1, 31).toIsoStringUtc();
-w += '\n';
-w += Unixtime.from(-3472472928838282881717114n, 12, 31).toIsoStringUtc();
-w += '\n';
-w += Unixtime.now().toIsoStringUtc();
-document.getElementById('result').innerText = w;
+    // Global Naming
+    const Unixtime = unixtime.Unixtime;
+    // Example
+    let w = '';
+    w += Unixtime.now() + '\n'
+    w += Unixtime.fromMillis(1234567890123) + '\n'
+    // 23948923423421773421234-01-31T00:00:00.000Z
+    w += Unixtime.fromUtc(23948923423421773421234n, 1, 31).toIsoStringUtc() + '\n';
+    // -3472472928838222222282881717114-12-31T14:59:59.999Z
+    w += Unixtime.from(-3472472928838222222282881717114n, 12, 31, 23, 59, 59, 999).toIsoStringUtc() + '\n';
+    document.getElementById('result').innerText = w;
 </script>
 ```
 
@@ -46,11 +47,11 @@ new Date(1900, 0, 1)
 // Note the +08:27 LMT shift
 
 // Unixtime maintains the same timezone offset consistently
-Unixtime.from(1900, 1, 1).toString()
+Unixtime.from(2000, 1, 1).toString()
 // -> 2000-01-01 (Sat) AM 00:00 00.000 +09:00
 Unixtime.from(1900, 1, 1).toString()
 // -> 1900-01-01 (Mon) AM 00:00 00.000 +09:00
-// +09:00 maintain same timezone
+// Maintain Same Timezone
 ```
 
 ## Example

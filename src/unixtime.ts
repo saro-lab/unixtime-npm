@@ -13,20 +13,40 @@ import {
 import {DateTimeDetail, TimeDetail} from "./index";
 
 export class Unixtime {
-    readonly time: bigint;
+    readonly timestamp: bigint;
     constructor(umillis: bigint) {
-        this.time = umillis;
+        this.timestamp = umillis;
     }
+    get $timestamp(): number {
+        return Number(this.timestamp);
+    }
+    get time(): bigint {
+        return this.timestamp / 1000n;
+    }
+    get $time(): number {
+        return Number(this.timestamp / 1000n);
+    }
+
     public static now() {
         return new Unixtime(BigInt(new Date().getTime()));
     }
     public static fromDate(date: Date): Unixtime {
         return new Unixtime(BigInt(date.getTime()));
     }
-    public static fromMillis(unixMillis: bigint|number|string): Unixtime {
+    public static fromMillis(unixMillis: bigint|number|string|Unixtime|Date): Unixtime {
+        if (unixMillis instanceof Unixtime) {
+            return unixMillis;
+        } else if (unixMillis instanceof Date) {
+            return new Unixtime(BigInt(unixMillis.getTime()));
+        }
         return new Unixtime(BigInt(typeof unixMillis === 'number' ? Math.floor(unixMillis) : unixMillis));
     }
-    public static fromSeconds(unixSeconds: bigint|number|string): Unixtime {
+    public static fromSeconds(unixSeconds: bigint|number|string|Unixtime|Date): Unixtime {
+        if (unixSeconds instanceof Unixtime) {
+            return unixSeconds;
+        } else if (unixSeconds instanceof Date) {
+            return new Unixtime(BigInt(unixSeconds.getTime()));
+        }
         return new Unixtime(BigInt(typeof unixSeconds === 'number' ? Math.floor(unixSeconds) : unixSeconds) * 1000n);
     }
     public static from(
@@ -44,11 +64,11 @@ export class Unixtime {
     }
 
     public toTimeDetail(timezoneOffset = new Date().getTimezoneOffset()): TimeDetail {
-        return _to_time_detail(this.time, timezoneOffset);
+        return _to_time_detail(this.timestamp, timezoneOffset);
     }
 
     public toDateTimeDetail(timezoneOffset = new Date().getTimezoneOffset()): DateTimeDetail {
-        return _to_date_time_detail(this.time, timezoneOffset);
+        return _to_date_time_detail(this.timestamp, timezoneOffset);
     }
 
     public format(dateFormat: string, timezoneOffset = new Date().getTimezoneOffset()): string {
@@ -84,8 +104,12 @@ export class Unixtime {
         return this.toDateTimeDetail(timezoneOffset).day;
     }
 
+    public isLeapYear(timezoneOffset = new Date().getTimezoneOffset()): boolean {
+        return this.toDateTimeDetail().leapYear;
+    }
+
     public getWeek(timezoneOffset = new Date().getTimezoneOffset()): number {
-        return _to_week_un_timezone(_with_timezone_offset(this.time, timezoneOffset))
+        return _to_week_un_timezone(_with_timezone_offset(this.timestamp, timezoneOffset))
     }
 
     public getWeekShort(timezoneOffset = new Date().getTimezoneOffset()): string {
@@ -133,22 +157,42 @@ export class Unixtime {
     }
 
     public plusMillis(milliseconds: number|bigint): Unixtime {
-        return new Unixtime(this.time + BigInt(milliseconds));
+        return new Unixtime(this.timestamp + BigInt(milliseconds));
     }
 
     public plusSeconds(seconds: number|bigint): Unixtime {
-        return new Unixtime(this.time + (BigInt(seconds) * MS1));
+        return new Unixtime(this.timestamp + (BigInt(seconds) * MS1));
     }
 
     public plusMinutes(minutes: number|bigint): Unixtime {
-        return new Unixtime(this.time + (BigInt(minutes) * MM1));
+        return new Unixtime(this.timestamp + (BigInt(minutes) * MM1));
     }
 
     public plusHours(hours: number|bigint): Unixtime {
-        return new Unixtime(this.time + (BigInt(hours) * MH1));
+        return new Unixtime(this.timestamp + (BigInt(hours) * MH1));
     }
 
     public plusDays(days: number|bigint): Unixtime {
-        return new Unixtime(this.time + (BigInt(days) * MD1));
+        return new Unixtime(this.timestamp + (BigInt(days) * MD1));
+    }
+
+    public before(time: Unixtime|number|bigint|Date, seconds: boolean = false): boolean {
+        return this.timestamp < (seconds ? Unixtime.fromSeconds(time) : Unixtime.fromMillis(time)).timestamp;
+    }
+
+    public beforeEq(time: Unixtime|number|bigint|Date, seconds: boolean = false): boolean {
+        return this.timestamp <= (seconds ? Unixtime.fromSeconds(time) : Unixtime.fromMillis(time)).timestamp;
+    }
+
+    public after(time: Unixtime|number|bigint|Date, seconds: boolean = false): boolean {
+        return this.timestamp > (seconds ? Unixtime.fromSeconds(time) : Unixtime.fromMillis(time)).timestamp;
+    }
+
+    public afterEq(time: Unixtime|number|bigint|Date, seconds: boolean = false): boolean {
+        return this.timestamp >= (seconds ? Unixtime.fromSeconds(time) : Unixtime.fromMillis(time)).timestamp;
+    }
+
+    public between(start: Unixtime|number|bigint|Date, end: Unixtime|number|bigint|Date, seconds: boolean = false): boolean {
+        return this.afterEq(start, seconds) && this.beforeEq(end, seconds);
     }
 }

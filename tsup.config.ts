@@ -1,16 +1,30 @@
 import { defineConfig } from 'tsup';
 import pkg from './package.json';
 
-export default defineConfig({
-    entry: {
-        [`infinite-unixtime-${pkg.version}`]: 'src/index.ts',
+export default defineConfig([
+    {
+        entry: {
+            [`infinite-unixtime-${pkg.version}`]: 'src/index.ts',
+        },
+        format: ['iife'],
+        globalName: '$Unixtime',
+        clean: true,
+        outExtension: () => ({js: '.js',}),
+        footer: {
+            js: 'if (typeof $Unixtime !== "undefined" && $Unixtime.Unixtime) { $Unixtime = $Unixtime.Unixtime; }'
+        }
     },
-    format: ['iife'],
-    globalName: 'unixtime',
-    clean: true,
-    outExtension() {
-        return {
-            js: '.js',
-        };
-    },
-});
+    {
+        entry: {
+            [`infinite-unixtime-${pkg.version}`]: 'src/index.ts',
+        },
+        format: ['iife'],
+        globalName: '$Unixtime',
+        clean: true,
+        minify: true,
+        outExtension: () => ({js: '.min.js',}),
+        footer: {
+            js: 'if (typeof $Unixtime !== "undefined" && $Unixtime.Unixtime) { $Unixtime = $Unixtime.Unixtime; }'
+        }
+    }
+]);

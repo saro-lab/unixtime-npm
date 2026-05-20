@@ -11,11 +11,10 @@ npm install infinite-unixtime
 ## CDN Build Example
 - [Download CDN Build](https://github.com/saro-lab/unixtime-npm/releases)
 ```html
-<script src="./infinite-unixtime-1.0.1.js"></script>
+<script src="./infinite-unixtime-1.1.1.min.js"></script>
 <pre id="result"></pre>
 <script type="text/javascript">
-    // Global Naming
-    const Unixtime = unixtime.Unixtime;
+    // If 'Unixtime' is already in use, you can use '$Unixtime' instead.
     // Example
     let w = '';
     w += Unixtime.now() + '\n'
@@ -92,43 +91,44 @@ console.log(u.toIsoStringUtc());
 console.log();
 
 u = Unixtime.fromUtc(0, 1, 1);
-assert.equal(u.time, -62167219200000n)
+assert.equal(u.timestamp, -62167219200000n)
 assert.equal(u.getWeekShort(0), 'Sat')
 console.log(u.toIsoStringUtc());
 console.log();
 
 u = Unixtime.fromUtc(-2, 12, 31, 23, 59, 59);
-assert.equal(u.time, -62198755201000n)
+assert.equal(u.timestamp, -62198755201000n)
 assert.equal(u.getWeekShort(0), 'Thu')
 console.log(u.toIsoStringUtc());
 console.log();
 
 u = Unixtime.fromUtc(-4, 2, 29, 23, 59, 59);
-assert.equal(u.time, -62288265601000n)
+assert.equal(u.timestamp, -62288265601000n)
 assert.equal(u.getWeekShort(0), 'Thu')
 console.log(u.toIsoStringUtc());
 console.log();
 
 u = Unixtime.fromUtc(-2000, 2, 29, 23, 59, 59);
-assert.equal(u.time, -125275939201000n)
+assert.equal(u.timestamp, -125275939201000n)
 assert.equal(u.getWeekShort(0), 'Tue')
 console.log(u.toIsoStringUtc());
 console.log();
 
 u = Unixtime.fromUtc(-2000, 3, 1, 0, 0, 0);
-assert.equal(u.time, -125275939200000n)
+assert.equal(u.timestamp, -125275939200000n)
 assert.equal(u.getWeekShort(0), 'Wed')
 console.log(u.toIsoStringUtc());
 console.log();
 ```
 
 ### Now
+
 ```javascript
 let u = Unixtime.now();
 console.log('string', u.toString())
 console.log('string', u.toString())
 console.log('datetime', u.toDateTimeDetail())
-console.log('time', u.time)
+console.log('time', u.timestamp)
 assert.equal(u.toIsoStringUtc(), u.toIsoString(0));
 console.log();
 ```

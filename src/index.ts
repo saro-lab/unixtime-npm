@@ -1,4 +1,4 @@
-export * from "./unixtime.js";
+import { Unixtime } from "./unixtime.js";
 
 export type DateTimeDetail = {
     readonly leapYear: boolean;
@@ -20,3 +20,9 @@ export type TimeDetail = {
     readonly milliseconds: number;
     readonly timezoneOffset: number;
 }
+
+if (typeof window !== 'undefined' && typeof (window as any).Unixtime === 'undefined') {
+    (window as any).Unixtime = Unixtime;
+}
+
+export { Unixtime }

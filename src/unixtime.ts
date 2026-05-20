@@ -8,7 +8,7 @@ import {
     MD1,
     MH1,
     MM1,
-    MS1
+    MS1, to_timestamp
 } from "./util.js";
 import {DateTimeDetail, TimeDetail} from "./index.js";
 
@@ -176,23 +176,23 @@ export class Unixtime {
         return new Unixtime(this.timestamp + (BigInt(days) * MD1));
     }
 
-    public before(time: Unixtime|number|bigint|Date, seconds: boolean = false): boolean {
-        return this.timestamp < (seconds ? Unixtime.fromSeconds(time) : Unixtime.fromMillis(time)).timestamp;
+    public before(time: Unixtime|number|bigint|string|Date, seconds: boolean = false): boolean {
+        return this.timestamp < to_timestamp(time, seconds);
     }
 
-    public beforeEq(time: Unixtime|number|bigint|Date, seconds: boolean = false): boolean {
-        return this.timestamp <= (seconds ? Unixtime.fromSeconds(time) : Unixtime.fromMillis(time)).timestamp;
+    public beforeEq(time: Unixtime|number|bigint|string|Date, seconds: boolean = false): boolean {
+        return this.timestamp <= to_timestamp(time, seconds)
     }
 
-    public after(time: Unixtime|number|bigint|Date, seconds: boolean = false): boolean {
-        return this.timestamp > (seconds ? Unixtime.fromSeconds(time) : Unixtime.fromMillis(time)).timestamp;
+    public after(time: Unixtime|number|bigint|string|Date, seconds: boolean = false): boolean {
+        return this.timestamp > to_timestamp(time, seconds)
     }
 
-    public afterEq(time: Unixtime|number|bigint|Date, seconds: boolean = false): boolean {
-        return this.timestamp >= (seconds ? Unixtime.fromSeconds(time) : Unixtime.fromMillis(time)).timestamp;
+    public afterEq(time: Unixtime|number|bigint|string|Date, seconds: boolean = false): boolean {
+        return this.timestamp >= to_timestamp(time, seconds)
     }
 
-    public between(start: Unixtime|number|bigint|Date, end: Unixtime|number|bigint|Date, seconds: boolean = false): boolean {
+    public between(start: Unixtime|number|bigint|string|Date, end: Unixtime|number|bigint|string|Date, seconds: boolean = false): boolean {
         return this.afterEq(start, seconds) && this.beforeEq(end, seconds);
     }
 }

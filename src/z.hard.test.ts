@@ -93,4 +93,28 @@ describe('hard test', () => {
         console.log(u.getLastDayOfMonth(), u.getAmPm(), u.getHours(), u.getHours12())
         console.log();
     });
+
+    it('hard test - before / after', async () => {
+        let u = Unixtime.fromUtc(1970, 1, 1);
+
+        // before
+        assert.isTrue(u.before(1));
+        assert.isFalse(u.before(0));
+        assert.isTrue(u.beforeEq(0));
+        assert.isFalse(u.beforeEq(-1));
+
+        // after
+        assert.isTrue(u.after(-1));
+        assert.isFalse(u.after(0));
+        assert.isTrue(u.afterEq(0));
+        assert.isFalse(u.afterEq(1));
+
+        // between
+        assert.isTrue(u.between(0, 1));
+        assert.isFalse(u.between(1, 2));
+        assert.isTrue(u.between(0, 2));
+        assert.isFalse(u.between(2, 0));
+
+        console.log('pass before / after / between');
+    });
 });

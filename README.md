@@ -11,7 +11,7 @@ npm install infinite-unixtime
 ## CDN Build Example
 - [Download CDN Build](https://github.com/saro-lab/unixtime-npm/releases)
 ```html
-<script src="./infinite-unixtime-1.1.3.min.js"></script>
+<script src="./infinite-unixtime-1.1.4.min.js"></script>
 <pre id="result"></pre>
 <script type="text/javascript">
     // If 'Unixtime' is already in use, you can use '$Unixtime' instead.

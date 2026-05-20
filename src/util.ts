@@ -2,7 +2,7 @@
 // umillis = unixtime milliseconds
 
 // Y = YEAR, L = LEAP 1 DAY
-import {DateTimeDetail, TimeDetail} from "./index.js";
+import {DateTimeDetail, TimeDetail, Unixtime} from "./index.js";
 
 const Y1 = 365n; // 1 year
 const Y1L = Y1 + 1n; // 1 year (leap)
@@ -92,6 +92,21 @@ export function _to_EE(week: number): string {
 
 export function _with_timezone_offset(millis: bigint, timezoneOffset: number): bigint {
     return millis - (BigInt(timezoneOffset) * MM1)
+}
+
+export function to_timestamp(n: Unixtime|number|bigint|string|Date, seconds: boolean = false): bigint {
+    if (typeof n === 'bigint') {
+        return seconds ? n * 1000n : n;
+    } else if (typeof n === 'number') {
+        return seconds ? BigInt(Math.floor(n)) * 1000n : BigInt(Math.floor(n));
+    } else if (typeof n === 'string') {
+        return seconds ? BigInt(n) * 1000n : BigInt(n);
+    } else if (n instanceof Date) {
+        return BigInt(n.getTime());
+    } else if (n instanceof Unixtime) {
+        return n.timestamp
+    }
+    throw new Error(`is not timestamp: ${n}`);
 }
 
 // [leapYear, leapCount]

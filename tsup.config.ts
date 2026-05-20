@@ -11,7 +11,7 @@ export default defineConfig([
         clean: true,
         outExtension: () => ({js: '.js',}),
         footer: {
-            js: 'if (typeof $Unixtime !== "undefined" && $Unixtime.Unixtime) { $Unixtime = $Unixtime.Unixtime; }'
+            js: 'if (typeof $Unixtime !== "undefined" && $Unixtime.Unixtime) { $Unixtime = $Unixtime.Unixtime; if (!window.Unixtime) { window.Unixtime = $Unixtime; } }'
         }
     },
     {
@@ -24,7 +24,7 @@ export default defineConfig([
         minify: true,
         outExtension: () => ({js: '.min.js',}),
         footer: {
-            js: 'if (typeof $Unixtime !== "undefined" && $Unixtime.Unixtime) { $Unixtime = $Unixtime.Unixtime; }'
+            js: 'if (typeof $Unixtime !== "undefined" && $Unixtime.Unixtime) { $Unixtime = $Unixtime.Unixtime; if (!window.Unixtime) { window.Unixtime = $Unixtime; } }'
         }
     }
 ]);

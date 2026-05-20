@@ -9,8 +9,8 @@ import {
     MH1,
     MM1,
     MS1
-} from "./util";
-import {DateTimeDetail, TimeDetail} from "./index";
+} from "./util.js";
+import {DateTimeDetail, TimeDetail} from "./index.js";
 
 export class Unixtime {
     readonly timestamp: bigint;

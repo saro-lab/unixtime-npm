@@ -2,7 +2,7 @@
 // umillis = unixtime milliseconds
 
 // Y = YEAR, L = LEAP 1 DAY
-import {DateTimeDetail, TimeDetail} from "./index";
+import {DateTimeDetail, TimeDetail} from "./index.js";
 
 const Y1 = 365n; // 1 year
 const Y1L = Y1 + 1n; // 1 year (leap)

@@ -1,7 +1,7 @@
 # Infinite Unixtime
 
 
-### [Online Demo](https://dat.saro.me/--/tool/times)
+### [Online Demo](https://dat.saro.me/tool/times)
 
 ## Quick Start
 ```
